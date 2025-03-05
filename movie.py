@@ -39,13 +39,15 @@ def main():
             img = plt.imread(r"Pictures\Image-not-found.png")
         return img
 
-    def fetch_poster(movie_id):
+    def fetch_poster(movie_id):        
         try:
             response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US'.format(movie_id))
             data = response.json()
             ff = "https://image.tmdb.org/t/p/w500/" + data['poster_path']
+
         except Exception as e:
             ff = plt.imread(r"Pictures\Image-not-found.png")
+
         return ff
 
     def get_link(query):
@@ -69,7 +71,7 @@ def main():
         data_mb1 = pd.read_csv(r"datasets\10000 Movies Data\10000 Movies Data")
         f_m = st.selectbox('Enter Movie Name: ',data_mb1['title'])
         if st.button('Search'):
-            with st.spinner("Gettin Results"):
+            with st.spinner("Getting Results"):
                 cols = st.columns([1,3])
                 img = fetch_poster(data_mb1[data_mb1['title']==f_m]['Movie_id'].values[0])
                 summ = data_mb1[data_mb1['title']==f_m]['overview'].values[0]
