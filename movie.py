@@ -14,6 +14,10 @@ import urllib.parse
 def main():
 
     st.set_page_config(layout = 'wide', page_title = "Movie Recommendation System")
+
+    if 'sim_df' not in st.session_state:
+        st.session_state['sim_df'] = None
+        
     st.title('Movies 4 U')
 
     st.sidebar.title("Movies 4 U")
@@ -110,12 +114,13 @@ def main():
 
                 sim_mat = cosine_similarity(vector)
                 sim_df = pd.DataFrame(sim_mat,index=data_mb1['Movie_id'],columns=data_mb1['Movie_id'])
+                st.session_state['sim_df'] = sim_df
 
             def find_sim(title):
                 id = data_mb1[data_mb1['title']==title]['Movie_id']
                 movs=[]
                 mov_posters = []
-                ids = sim_df[id.values[0]].sort_values(ascending=False)[1:6]
+                ids = st.session_state['sim_df'][id.values[0]].sort_values(ascending=False)[1:6]
                 for i in ids.index:
                     m = data_mb1[data_mb1['Movie_id']==i]['title']
                     movs.append(m.values[0])
@@ -203,7 +208,7 @@ def main():
             id = f_d_mb[f_d_mb['title']==title]['Movie_id']
             movs=[]
             mov_posters = []
-            ids = sim_df[id.values[0]].sort_values(ascending=False)[1:37]
+            ids = st.session_state['sim_df'][id.values[0]].sort_values(ascending=False)[1:37]
             for i in ids.index:
                 m = f_d_mb[f_d_mb['Movie_id']==i]['title']
                 movs.append(m.values[0])
